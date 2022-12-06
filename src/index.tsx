@@ -3,15 +3,36 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {createStore} from 'redux';
+import rootReducer from './reducers/index';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
+
+//리덕스 스토어 생성
+const store = createStore(rootReducer);
+
+store.dispatch({
+  type:"ADD_TODO",
+  text: "USE_REDUX"
+})
+
+console.log('store.getState()',store.getState())
+
+const render = () => root.render(
   <React.StrictMode>
-    <App />
+    <App 
+    value={store.getState()} 
+    onIncrement={()=>store.dispatch({type:"INCREMENT"})}
+    onDecrement={()=>store.dispatch({type:"DECREMENT"})}
+    />
   </React.StrictMode>
 );
+
+render();
+
+store.subscribe(render);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
